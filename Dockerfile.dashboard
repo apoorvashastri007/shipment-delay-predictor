@@ -1,0 +1,17 @@
+# ── Shipment Delay Predictor: Streamlit dashboard ──
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies first (better layer caching)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code, trained model, and data
+COPY dashboard/ ./dashboard/
+COPY models/ ./models/
+COPY data/ ./data/
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "dashboard/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
